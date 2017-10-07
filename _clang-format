@@ -1,0 +1,54 @@
+---
+Language: Cpp
+AlignConsecutiveAssignments: true
+AlignTrailingComments: true
+AlignAfterOpenBracket: Align
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+BreakBeforeTernaryOperators: true
+Cpp11BracedListStyle: true
+IndentCaseLabels: true
+IndentWidth: '4'
+IndentWrappedFunctionNames: false
+JavaScriptQuotes: Leave
+KeepEmptyLinesAtTheStartOfBlocks: true
+MaxEmptyLinesToKeep: 2
+NamespaceIndentation: All
+PenaltyExcessCharacter: 0
+PointerAlignment: Right
+ReflowComments: false
+SortIncludes: true
+SpaceAfterCStyleCast: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 0
+SpacesInAngles: false
+SpacesInCStyleCastParentheses: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+Standard: Cpp11
+TabWidth: 4
+UseTab: ForIndentation
+SortUsingDeclarations: true
+IndentPPDirectives: AfterHash
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterObjCDeclaration: true
+  AfterStruct: true
+  AfterUnion: true
+  BeforeCatch: true
+  BeforeElse: true
+
+  IndentBraces: false
+
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+
