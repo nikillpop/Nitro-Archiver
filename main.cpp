@@ -2,6 +2,20 @@
 #include <iomanip>
 #include <iostream>
 
+/**
+ * Idea para convertir los comandos que el usuario
+ * introduzca en "tempCmds" en algo manejable, convirtiendo
+ * los comandos en un array de enumeradores
+ *
+enum class cmds
+{
+	NO_CMDS,
+	ERROR,
+	HELP,
+	HEADER,
+};
+*/
+
 int main()
 {
 	std::cout << "Narc-Archiver, Commit #7, By Jes" << char(163) << "s (Jes)\n"
@@ -9,7 +23,7 @@ int main()
 
 	std::cout << "Enter file name: ";
 	std::string fileName;
-	std::cin >> fileName;
+	std::getline(std::cin, fileName);
 
 	std::fstream narc(fileName, std::ios::binary | std::ios::in);
 
@@ -23,12 +37,10 @@ int main()
 		std::cout << "File opened correctly\n" << std::endl;
 	}
 
-	std::string cmds;
+	std::string tempCmds;
 
 	std::cout << "Enter commands: ";
-	std::cin.ignore();
-	std::getline(std::cin, cmds);
+	std::getline(std::cin, tempCmds);
 
-	std::cin.ignore(32767, '\n');
 	std::cin.get();
 }
