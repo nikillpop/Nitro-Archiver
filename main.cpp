@@ -19,7 +19,7 @@ void readHeaderData(std::fstream &);
 
 int main()
 {
-	std::cout << "Narc-Archiver, Commit #11, By Jes" << char(163) << "s (Jes)\n"
+	std::cout << "Narc-Archiver, Commit #15, By Jes" << char(163) << "s (Jes)\n"
 	          << std::endl;
 
 	std::cout << "Enter filename to open: ";
