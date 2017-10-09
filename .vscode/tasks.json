@@ -4,26 +4,33 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "Test",
+            "taskName": "Build Debug",
             "type": "shell",
             "command": "g++",
             "args": [
-                "-g", "-std=c++17", "-o", "Exes/Test.exe",  "-Wall","main.cpp"
+                "-g",
+                "-std=c++17",
+                "-o",
+                "Exes/Test.exe",
+                "-Wall",
+                "-Wextra",
+                "main.cpp",
+                "commands/header_data.cpp"
             ],
-
             "presentation": {
                 "reveal": "silent",
                 "echo": true
             },
-
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-
             "problemMatcher": {
                 "owner": "cpp",
-                "fileLocation": ["relative", "${workspaceRoot}"],
+                "fileLocation": [
+                    "relative",
+                    "${workspaceRoot}"
+                ],
                 "pattern": {
                     "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
                     "file": 1,
@@ -33,6 +40,19 @@
                     "message": 5
                 }
             }
+        },
+
+        {
+            "taskName": "Execute",
+            "type": "shell",
+            "command": "p:/NARC-Archiver/Exes/Test.exe",
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
         }
     ]
 }

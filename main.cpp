@@ -9,11 +9,13 @@ enum class arg
 	ERROR,
 
 	// Comandos
-	HELP,  //-h
-	HEADER,//-e
+	HELP,       //-h
+	HEADER_DATA,//-d
 };
 
 void parseTempArgs(std::string, arg[], const int);
+void caller(arg[], const int, std::fstream &);
+void readHeaderData(std::fstream &);
 
 int main()
 {
@@ -50,6 +52,8 @@ int main()
 
 	parseTempArgs(tempArgs, arguments, maxArgs);
 
+	caller(arguments, maxArgs, narc);
+
 	std::cin.get();
 }
 
@@ -58,5 +62,18 @@ void parseTempArgs(std::string argsToParse, arg finalArgs[], const int maxArgs)
 	if (argsToParse.compare(0, 2, "-h") == 0)
 	{
 		finalArgs[0] = arg::HELP;
+	}
+
+	if (argsToParse.compare(0, 2, "-d") == 0)
+	{
+		finalArgs[0] = arg::HEADER_DATA;
+	}
+}
+
+void caller(arg arguments[], const int maxArgs, std::fstream &narc)
+{
+	if (arguments[0] == arg::HEADER_DATA)
+	{
+		readHeaderData(narc);
 	}
 }
