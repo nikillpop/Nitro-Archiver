@@ -9,8 +9,8 @@ enum class arg
 	ERROR,
 
 	// Comandos
-	HELP,       //-h
-	HEADER_DATA,//-d
+	HELP,        //-h
+	HEADER_DATA, //-d
 };
 
 void parseTempArgs(std::string, arg[], const int);

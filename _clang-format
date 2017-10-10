@@ -1,5 +1,6 @@
 ---
 Language: Cpp
+
 AlignConsecutiveAssignments: true
 AlignTrailingComments: true
 AlignAfterOpenBracket: Align
@@ -9,12 +10,10 @@ BreakBeforeTernaryOperators: true
 Cpp11BracedListStyle: true
 IndentCaseLabels: true
 IndentWidth: '4'
-IndentWrappedFunctionNames: false
-JavaScriptQuotes: Leave
+IndentWrappedFunctionNames: true
 KeepEmptyLinesAtTheStartOfBlocks: true
 MaxEmptyLinesToKeep: 2
 NamespaceIndentation: All
-PenaltyExcessCharacter: 0
 PointerAlignment: Right
 ReflowComments: false
 SortIncludes: true
@@ -22,16 +21,23 @@ SpaceAfterCStyleCast: false
 SpaceBeforeAssignmentOperators: true
 SpaceBeforeParens: ControlStatements
 SpaceInEmptyParentheses: false
-SpacesBeforeTrailingComments: 0
-SpacesInAngles: false
+SpacesBeforeTrailingComments: 1
 SpacesInCStyleCastParentheses: false
+
+SpacesInAngles: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
+
 Standard: Cpp11
 TabWidth: 4
 UseTab: ForIndentation
 SortUsingDeclarations: true
 IndentPPDirectives: AfterHash
+
+ColumnLimit: 80
+#PenaltyBreakFirstLessLess: 0
+#PenaltyExcessCharacter: 0
+
 
 BreakBeforeBraces: Custom
 BraceWrapping:
@@ -40,9 +46,9 @@ BraceWrapping:
   AfterEnum: true
   AfterFunction: true
   AfterNamespace: true
-  AfterObjCDeclaration: true
   AfterStruct: true
   AfterUnion: true
+  #AfterExternBlock: (?)
   BeforeCatch: true
   BeforeElse: true
 
