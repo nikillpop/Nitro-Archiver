@@ -7,7 +7,7 @@ PRODUCTVERSION  0,0,1,0
   {
     BLOCK "040904E4"
     {
-      VALUE "CompanyName", "Jes©®™"
+      VALUE "CompanyName", "Jes' House C.A. & asfdafas++"
       VALUE "FileDescription", "NARC Archiver for NDS ROMs"
       VALUE "FileVersion", "1.0b"
       VALUE "InternalName", "NA"

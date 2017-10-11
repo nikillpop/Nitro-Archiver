@@ -2,57 +2,34 @@
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
     "version": "2.0.0",
+    "type": "shell",
+    "options": {
+        "cwd": "${cwd}/Makes"
+    },
     "tasks": [
         {
             "taskName": "Build Debug",
-            "type": "shell",
-            "command": "g++",
-            "args": [
-                "-g",
-                "-std=c++17",
-                "-o",
-                "Exes/Test.exe",
-                "-Wall",
-                "-Wextra",
-                "main.cpp",
-                "commands/header_data.cpp"
-            ],
+            "command": "makeDebug.bat",
             "presentation": {
                 "reveal": "silent",
                 "echo": true
             },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": {
-                "owner": "cpp",
-                "fileLocation": [
-                    "relative",
-                    "${workspaceRoot}"
-                ],
-                "pattern": {
-                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                    "file": 1,
-                    "line": 2,
-                    "column": 3,
-                    "severity": 4,
-                    "message": 5
-                }
-            }
+            "problemMatcher": [
+                "$gcc"
+            ]
         },
-
         {
-            "taskName": "Execute",
-            "type": "shell",
-            "command": "p:/NARC-Archiver/Exes/Test.exe",
+            "taskName": "Build Releases",
+            "command": "makeReleases.bat",
             "presentation": {
                 "echo": false,
                 "reveal": "always",
-                "focus": true,
-                "panel": "dedicated"
+                "focus": false,
+                "panel": "shared"
             },
-            "problemMatcher": []
+            "problemMatcher": [
+                "$gcc"
+            ]
         }
     ]
 }
