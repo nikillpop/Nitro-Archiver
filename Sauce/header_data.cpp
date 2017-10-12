@@ -19,6 +19,8 @@
 #include <iomanip>
 #include <iostream>
 
+std::string ToHex(const std::string &s);
+
 void readHeaderData(std::fstream &narc)
 {
 	char readedData[4]{};
@@ -38,10 +40,13 @@ void readHeaderData(std::fstream &narc)
 
 	narc.seekg(0x4, std::ios::beg);
 	narc.read(readedData, 0x2);
-	std::cout << "Byte Order:\t0x" << std::hex
-	          << static_cast<unsigned>(readedData[0])
-	          << static_cast<unsigned>(readedData[1]) << std::endl;
-	//No funciona como debe, imprime 0xFFFFFFXXFFFFFFYY en vez de 0xXXYY
+
+	int s = 2;
+
+	std::string tohexed = ToHex(std::string(readedData, s));
+
+	std::cout << "Byte Order:\t0x" << tohexed << std::endl;
+
 
 	std::cout << "\n__File Alocation Table___" << std::endl;
 
@@ -50,4 +55,18 @@ void readHeaderData(std::fstream &narc)
 	narc.read(readedData, 0x2);
 	std::cout << "Files:\t\t" << std::dec << readedData[0] + readedData[1]
 	          << std::endl;
+}
+
+std::string ToHex(const std::string &s)
+{
+	std::ostringstream ret;
+
+	for (std::string::size_type i = 0; i < s.length(); ++i)
+	{
+		int z = s[i] & 0xff;
+		ret << std::hex << std::setfill('0') << std::setw(2) << std::uppercase
+		    << z;
+	}
+
+	return ret.str();
 }
