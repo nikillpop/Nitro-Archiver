@@ -41,11 +41,19 @@ void readHeaderData(std::fstream &narc)
 	narc.seekg(0x4, std::ios::beg);
 	narc.read(readedData, 0x2);
 
-	int s = 2;
+	int readLength = 2;
 
-	std::string tohexed = ToHex(std::string(readedData, s));
+	std::string tohexed = ToHex(std::string(readedData, readLength));
 
 	std::cout << "Byte Order:\t0x" << tohexed << std::endl;
+
+
+	narc.seekg(0x6, std::ios::beg);
+	narc.read(readedData, 0x2);
+
+	tohexed = ToHex(std::string(readedData, readLength));
+
+	std::cout << "Version:\t0x" << tohexed << std::endl;
 
 
 	std::cout << "\n__File Alocation Table___" << std::endl;
@@ -61,9 +69,9 @@ std::string ToHex(const std::string &s)
 {
 	std::ostringstream ret;
 
-	for (std::string::size_type i = 0; i < s.length(); ++i)
+	for (std::string::size_type i = s.length(); i > 0; --i)
 	{
-		int z = s[i] & 0xff;
+		int z = s[i - 1] & 0xff;
 		ret << std::hex << std::setfill('0') << std::setw(2) << std::uppercase
 		    << z;
 	}
