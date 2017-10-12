@@ -36,11 +36,11 @@ void readHeaderData(std::fstream &);
 
 int main()
 {
-	std::cout << "Narc-Archiver v1.0beta - Copyright (C) 2017 Jes\n"
+	std::cout << "Nitro-Archiver v1.1beta - Copyright (C) 2017 Jes\n"
 	          << "This software is distributed under "
 	          << "GNU General Public Licence v3\n"
 	          << "You can get a copy of the source code in "
-	          << "<github.com/JesMJM/NARC-Archiver>\n"
+	          << "<https://github.com/JesMJM/Nitro-Archiver>\n"
 	          << std::endl;
 
 	std::cout << "Enter filename to open: ";
