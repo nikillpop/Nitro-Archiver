@@ -11,8 +11,10 @@
             "taskName": "Build Debug",
             "command": "makeDebug.bat",
             "presentation": {
-                "reveal": "silent",
-                "echo": true
+                "echo": false,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
             },
             "problemMatcher": [
                 "$gcc"

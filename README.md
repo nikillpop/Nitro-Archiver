@@ -1,3 +1,7 @@
+<p align="center">
+  <img alt="VS Code in action" src="https://i.imgur.com/HuPqhhy.png">
+</p>
+
 This project aims to full support of write/read Nitro Archives for NDS rom hacking purposes, also learn C++ programing.
 
 # Nitro Archive
@@ -14,10 +18,3 @@ R/W of NARCs (and NitroROM filesystem) its needed in order to modify some NDS ga
   - Over/write files to narcs.
   - Over/write narcs to NDS ROMs.
   - Support calling the tool with arguments.
-
-# how to build
-
-Run make.bat
-
-You need the basic installation of MinGW/64.  
-This project is compiled with MinGW64 5.0.2 (gcc 7.1.0)
