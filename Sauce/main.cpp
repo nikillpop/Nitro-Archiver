@@ -36,7 +36,7 @@ void readHeaderData(std::fstream &);
 
 int main(int argc, char *argv[])
 {
-	std::cout << "\nNitro-Archiver v1.1beta - Copyright (C) 2017 Jes\n"
+	std::cout << "\nNitro-Archiver v1.9beta - Copyright (C) 2017 Jes\n"
 	          << "This software is distributed under "
 	          << "GNU General Public Licence v3\n"
 	          << "You can get a copy of the source code in "

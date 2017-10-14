@@ -126,9 +126,12 @@ void readHeaderData(std::fstream &narc)
 	std::cout << " (" << std::dec << concatenatedTemp << " bytes)" << std::endl;
 
 	//Number of Files-----------------------------------------------------------
+	int numOfFiles{}; //Used later to read the FAT
+
+	narc.seekg(0x19, std::ios::beg);
+	numOfFiles += (narc.peek() * 256);
 	narc.seekg(0x18, std::ios::beg);
-	narc.read(readedData, 0x2);
-	int numOfFiles = readedData[0] + readedData[1]; //Used later to read the FAT
+	numOfFiles += narc.peek();
 
 	std::cout << "Files:\t\t\t" << std::dec << numOfFiles << std::endl;
 

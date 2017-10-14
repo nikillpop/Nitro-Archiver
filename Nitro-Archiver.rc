@@ -1,7 +1,7 @@
 id ICON icon.ico
 1 VERSIONINFO
-FILEVERSION     1,1,0,0
-PRODUCTVERSION  1,1,0,0
+FILEVERSION     1,9,0,0
+PRODUCTVERSION  1,9,0,0
 {
   BLOCK "StringFileInfo"
   {
@@ -9,11 +9,11 @@ PRODUCTVERSION  1,1,0,0
     {
       VALUE "CompanyName", "Jes' House C.A. & asfdafas++"
       VALUE "FileDescription", "NARC Archiver for NDS ROMs"
-      VALUE "FileVersion", "1.1b"
+      VALUE "FileVersion", "1.9b"
       VALUE "InternalName", "NA"
       VALUE "OriginalFilename", "Nitro-Archiver.exe"
       VALUE "ProductName", "Nitro Archiver"
-      VALUE "ProductVersion", "1.1b"
+      VALUE "ProductVersion", "1.9b"
     }
   }
   BLOCK "VarFileInfo"
