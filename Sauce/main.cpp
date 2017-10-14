@@ -34,29 +34,51 @@ void parseTempArgs(std::string, arg[], const int);
 void caller(arg[], const int, std::fstream &);
 void readHeaderData(std::fstream &);
 
-int main()
+int main(int argc, char *argv[])
 {
-	std::cout << "Nitro-Archiver v1.1beta - Copyright (C) 2017 Jes\n"
+	std::cout << "\nNitro-Archiver v1.1beta - Copyright (C) 2017 Jes\n"
 	          << "This software is distributed under "
 	          << "GNU General Public Licence v3\n"
 	          << "You can get a copy of the source code in "
 	          << "<https://github.com/JesMJM/Nitro-Archiver>\n"
 	          << std::endl;
 
-	std::cout << "Enter filename to open: ";
-	std::string fileName;
-	std::getline(std::cin, fileName);
+	std::fstream narc;
 
-	std::fstream narc(fileName, std::ios::binary | std::ios::in);
-
-	if (narc.fail())
+	if (argc == 1)
 	{
-		std::cerr << "Error opening \"" << fileName << "\"" << std::endl;
-		return 1;
+		std::cout << "Enter filename to open: ";
+		std::string fileName;
+		std::getline(std::cin, fileName);
+
+		narc.open(fileName, std::ios::binary | std::ios::in);
+
+		if (narc.fail())
+		{
+			std::cerr << "Error opening \"" << fileName << "\"" << std::endl;
+			return 1;
+		}
+		else
+		{
+			std::cout << "File opened correctly\n" << std::endl;
+		}
+	}
+	else if (argc == 2)
+	{
+
+		narc.open(argv[1], std::ios::binary | std::ios::in);
+
+		if (narc.fail())
+		{
+			std::cerr << "Error opening \"" << argv[1] << "\"" << std::endl;
+			return 1;
+		}
 	}
 	else
 	{
-		std::cout << "File opened correctly\n" << std::endl;
+		std::cerr << "Something bad happened, this program only suports "
+		          << "opening with one argument which must be a filename.";
+		return 1;
 	}
 
 	/** "string TempArgs" guardara los argumentos en línea

@@ -17,6 +17,7 @@ R/W of NARCs (and NitroROM filesystem) its needed in order to modify some NDS ga
 
 - Extract files from narcs.
 - Extract narcs from NDS ROMS.
+- Ramdon R/W of files inside narcs.
 - Make new empty narcs.
 - Over/write files to narcs.
 - Over/write narcs to NDS ROMs.
