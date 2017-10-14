@@ -12,7 +12,7 @@ IndentCaseLabels: true
 IndentWidth: '4'
 IndentWrappedFunctionNames: true
 KeepEmptyLinesAtTheStartOfBlocks: true
-MaxEmptyLinesToKeep: 2
+MaxEmptyLinesToKeep: 3
 NamespaceIndentation: All
 PointerAlignment: Right
 ReflowComments: false
