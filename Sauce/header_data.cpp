@@ -28,6 +28,7 @@ void readHeaderData(std::fstream &narc)
 	std::cout << "\n_______Narc Header_______" << std::endl;
 
 
+	//Chunk Name----------------------------------------------------------------
 	narc.seekg(0x0, std::ios::beg);
 	narc.read(readedData, 0x4);
 	std::cout << "Chunk Name:\t\"";
@@ -38,26 +39,50 @@ void readHeaderData(std::fstream &narc)
 	std::cout << "\"" << std::endl;
 
 
-	narc.seekg(0x4, std::ios::beg);
+	//Byte Order----------------------------------------------------------------
+	narc.seekg(0x5, std::ios::beg);
 	narc.read(readedData, 0x2);
 
-	int readLength = 2;
-
-	std::string tohexed = ToHex(std::string(readedData, readLength));
+	std::string tohexed = ToHex(std::string(readedData, narc.gcount()));
 
 	std::cout << "Byte Order:\t0x" << tohexed << std::endl;
 
 
+	//Version-------------------------------------------------------------------
+	std::cout << "Version:\t0x";
+
+	narc.seekg(0x7, std::ios::beg);
+	std::cout << std::setfill('0') << std::setw(2) << std::hex << narc.peek();
 	narc.seekg(0x6, std::ios::beg);
-	narc.read(readedData, 0x2);
-
-	tohexed = ToHex(std::string(readedData, readLength));
-
-	std::cout << "Version:\t0x" << tohexed << std::endl;
+	std::cout << std::setfill('0') << std::setw(2) << std::hex << narc.peek()
+	          << std::endl;
 
 
+	//File Size-----------------------------------------------------------------
+	std::cout << "File Size:\t0x";
+
+	uint8_t buffer[4]{};
+	narc.seekg(0xb, std::ios::beg);
+	buffer[3] = narc.peek();
+	std::cout << std::hex << narc.peek();
+	narc.seekg(0xa, std::ios::beg);
+	buffer[2] = narc.peek();
+	std::cout << std::hex << narc.peek();
+	narc.seekg(0x9, std::ios::beg);
+	buffer[1] = narc.peek();
+	std::cout << std::hex << narc.peek();
+	narc.seekg(0x8, std::ios::beg);
+	buffer[0] = narc.peek();
+	std::cout << std::hex << narc.peek();
+
+	uint32_t x = buffer[3] * 256 * 256 * 256 + buffer[2] * 256 * 256 +
+	             buffer[1] * 256 + buffer[0];
+
+	std::cout << " (" << std::dec << x << " bytes)";
+
+
+	//File Alocation Table======================================================
 	std::cout << "\n__File Alocation Table___" << std::endl;
-
 
 	narc.seekg(0x18, std::ios::beg);
 	narc.read(readedData, 0x2);
