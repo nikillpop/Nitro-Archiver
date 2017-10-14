@@ -19,37 +19,34 @@
 #include <iomanip>
 #include <iostream>
 
-std::string ToHex(const std::string &s);
 
 void readHeaderData(std::fstream &narc)
 {
 	char readedData[4]{};
 
-	std::cout << "\n_______Narc Header_______" << std::endl;
-
+	std::cout << "\n_________Narc Header__________" << std::endl;
 
 	//Chunk Name----------------------------------------------------------------
 	narc.seekg(0x0, std::ios::beg);
 	narc.read(readedData, 0x4);
-	std::cout << "Chunk Name:\t\"";
+	std::cout << "Chunk Name:\t\t\"";
 	for (auto &letter : readedData)
 	{
 		std::cout << letter;
 	}
 	std::cout << "\"" << std::endl;
 
-
 	//Byte Order----------------------------------------------------------------
+	std::cout << "Byte Order:\t\t0x";
 	narc.seekg(0x5, std::ios::beg);
-	narc.read(readedData, 0x2);
-
-	std::string tohexed = ToHex(std::string(readedData, narc.gcount()));
-
-	std::cout << "Byte Order:\t0x" << tohexed << std::endl;
+	std::cout << std::setfill('0') << std::setw(2) << std::hex << narc.peek();
+	narc.seekg(0x4, std::ios::beg);
+	std::cout << std::setfill('0') << std::setw(2) << std::hex << narc.peek()
+	          << std::endl;
 
 
 	//Version-------------------------------------------------------------------
-	std::cout << "Version:\t0x";
+	std::cout << "Version:\t\t0x";
 
 	narc.seekg(0x7, std::ios::beg);
 	std::cout << std::setfill('0') << std::setw(2) << std::hex << narc.peek();
@@ -57,9 +54,8 @@ void readHeaderData(std::fstream &narc)
 	std::cout << std::setfill('0') << std::setw(2) << std::hex << narc.peek()
 	          << std::endl;
 
-
 	//File Size-----------------------------------------------------------------
-	std::cout << "File Size:\t0x";
+	std::cout << "File Size:\t\t0x";
 
 	uint8_t buffer[4]{};
 	narc.seekg(0xb, std::ios::beg);
@@ -78,28 +74,32 @@ void readHeaderData(std::fstream &narc)
 	uint32_t x = buffer[3] * 256 * 256 * 256 + buffer[2] * 256 * 256 +
 	             buffer[1] * 256 + buffer[0];
 
-	std::cout << " (" << std::dec << x << " bytes)";
+	std::cout << " (" << std::dec << x << " bytes)" << std::endl;
+
+	//chunk size----------------------------------------------------------------
+
+	std::cout << "Chunk size:\t\t0x";
+	narc.seekg(0xd, std::ios::beg);
+	std::cout << std::setfill('0') << std::setw(2) << std::hex << narc.peek();
+	narc.seekg(0xc, std::ios::beg);
+	std::cout << std::setfill('0') << std::setw(2) << std::hex << narc.peek()
+	          << std::endl;
+
+	//Number of following chunks------------------------------------------------
+
+	std::cout << "Following chunks:\t0x";
+	narc.seekg(0xf, std::ios::beg);
+	std::cout << std::setfill('0') << std::setw(2) << std::hex << narc.peek();
+	narc.seekg(0xe, std::ios::beg);
+	std::cout << std::setfill('0') << std::setw(2) << std::hex << narc.peek()
+	          << std::endl;
 
 
 	//File Alocation Table======================================================
-	std::cout << "\n__File Alocation Table___" << std::endl;
+	std::cout << "_____File Alocation Table_____" << std::endl;
 
 	narc.seekg(0x18, std::ios::beg);
 	narc.read(readedData, 0x2);
-	std::cout << "Files:\t\t" << std::dec << readedData[0] + readedData[1]
+	std::cout << "Files:\t\t\t" << std::dec << readedData[0] + readedData[1]
 	          << std::endl;
-}
-
-std::string ToHex(const std::string &s)
-{
-	std::ostringstream ret;
-
-	for (std::string::size_type i = s.length(); i > 0; --i)
-	{
-		int z = s[i - 1] & 0xff;
-		ret << std::hex << std::setfill('0') << std::setw(2) << std::uppercase
-		    << z;
-	}
-
-	return ret.str();
 }
