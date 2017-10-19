@@ -19,6 +19,10 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <vector>
+
+#define FILE_SELECTED_WITH_ARGUMENTS true
+#define FILE_SELECTED_WITH_NITRO_ARCHIVER false
 
 enum class arg
 {
@@ -31,8 +35,6 @@ enum class arg
 	HEADER_DATA, //-d
 };
 
-void parseTempArgs(std::string, arg[], const int);
-void caller(arg[], const int, std::fstream &narc);
 void readHeaderData(std::fstream &narc);
 void chekFile(std::fstream &narc, bool openedViaArgument);
 
@@ -47,6 +49,7 @@ int main(int argc, char *argv[])
 
 	std::fstream narc;
 
+	//If the user simply opens the program.
 	if (argc == 1)
 	{
 		std::cout << "Enter filename to open: ";
@@ -60,16 +63,11 @@ int main(int argc, char *argv[])
 			std::cerr << "Error opening \"" << fileName << "\"" << std::endl;
 			return 1;
 		}
-		else
-		{
-			std::cout << "File opened correctly\n" << std::endl;
-			//False means the file was selected with Nitro-Archiver
-			chekFile(narc, false);
-		}
+		chekFile(narc, FILE_SELECTED_WITH_NITRO_ARCHIVER);
 	}
+	//If the user opens the program dragging a narc in the exe file.
 	else if (argc == 2)
 	{
-
 		narc.open(argv[1], std::ios::binary | std::ios::in);
 
 		if (narc.fail())
@@ -77,61 +75,67 @@ int main(int argc, char *argv[])
 			std::cerr << "Error opening \"" << argv[1] << "\"" << std::endl;
 			return 1;
 		}
-		//True means the file was selected via argument
-		chekFile(narc, true);
+		chekFile(narc, FILE_SELECTED_WITH_ARGUMENTS);
 	}
+	//If the user opens the program calling it with args from command line.
 	else
 	{
-		std::cerr << "Something bad happened, this program only suports "
-		          << "opening with one argument which must be a filename.";
-		return 1;
+		std::vector<std::string> arguments(argv, argv + argc);
+		narc.open(arguments.at(1), std::ios::binary | std::ios::in);
+
+		if (narc.fail())
+		{
+			std::cerr << "Error opening \"" << arguments.at(1) << "\""
+			          << std::endl;
+			return 1;
+		}
+		//Deletes args "X:\...\Narc-Archiver" & "X:\...\filename.narc".
+		arguments.erase(arguments.begin(), arguments.begin() + 2);
+
+		chekFile(narc, FILE_SELECTED_WITH_ARGUMENTS);
 	}
 
-	std::string tempArgs;
-	std::cout << "Enter arguments: ";
-	std::getline(std::cin, tempArgs);
+	//Ask args if user do not open the program with args from command line.
+	if (argc < 3)
+	{
+		std::vector<std::string> arguments;
 
-	const int maxArgs{2};
-	arg arguments[maxArgs]{arg::NO_ARG};
+		std::string tempString{};
+		std::string tempStringSearch{};
+		std::cout << "Enter arguments: ";
+		getline(std::cin, tempString);
 
-	parseTempArgs(tempArgs, arguments, maxArgs);
+		while (!tempString.empty())
+		{
+			arguments.push_back(tempString.substr(0, tempString.find(' ')));
 
-	caller(arguments, maxArgs, narc);
+			tempString.erase(0, (tempString.find(' ') + 1));
+		}
+	}
 
 	std::cin.get();
 }
 
-void parseTempArgs(std::string argsToParse, arg finalArgs[], const int maxArgs)
-{
-	if (argsToParse.compare(0, 2, "-h") == 0) finalArgs[0] = arg::HELP;
-
-	if (argsToParse.compare(0, 2, "-d") == 0) finalArgs[0] = arg::HEADER_DATA;
-}
-
-void caller(arg arguments[], const int maxArgs, std::fstream &narc)
-{
-	if (arguments[0] == arg::HEADER_DATA) readHeaderData(narc);
-}
 
 void chekFile(std::fstream &narc, bool openedViaArgument)
 {
-	bool invalidInput{false}; //If true at the end of the func, trows a warn
-	char buffer[4]{};         //Temporal storage for using read();
-	std::string tempSting{};  //For comparing buffer with == or !=
+	bool invalidInput{false}; //If true at the end of the func, trows a warn.
+	char buffer[4]{};         //Temporal storage for using read();.
+	std::string tempString{}; //For comparing buffer with == or !=.
 
-	//First 0x4 bytes of narc header must say "NARC"
+	//First 0x4 bytes of narc header must say "NARC".
 	narc.seekg(0x0, std::ios::beg);
 	narc.read(buffer, 0x4);
-	tempSting.assign(buffer, 4);
-	if (tempSting != "NARC") invalidInput = true;
+	tempString.assign(buffer, 4);
+	if (tempString != "NARC") invalidInput = true;
 
-	//First 0x4 bytes of FAT must say "BTAF"
+	//First 0x4 bytes of FAT must say "BTAF".
 	narc.seekg(0x10, std::ios::beg);
 	narc.read(buffer, 0x4);
-	tempSting.assign(buffer, 4);
-	if (tempSting != "BTAF") invalidInput = true;
+	tempString.assign(buffer, 4);
+	if (tempString != "BTAF") invalidInput = true;
 
-	//The FAT chunk size must make sense whit the number of files
+	//The FAT chunk size must make sense whit the number of files.
 	uint16_t files{};
 	uint32_t chunkSize{};
 
@@ -146,7 +150,7 @@ void chekFile(std::fstream &narc, bool openedViaArgument)
 
 	if (((files * 8u) + 0xCu) != chunkSize) invalidInput = true;
 
-	//End of checks
+	//End of checks.
 	if (invalidInput)
 	{
 		std::cout << "Error:\tThe file is invalid or is corrupted\n"
