@@ -24,30 +24,22 @@
 #define FILE_SELECTED_WITH_ARGUMENTS true
 #define FILE_SELECTED_WITH_NITRO_ARCHIVER false
 
-enum class arg
-{
-	// Usados como flags
-	NO_ARG,
-	ERROR,
-
-	// Comandos
-	HELP,        //-h
-	HEADER_DATA, //-d
-};
-
-void readHeaderData(std::fstream &narc);
+void NARCinfo(std::fstream &narc);
 void chekFile(std::fstream &narc, bool openedViaArgument);
+void unpackFiles(std::fstream &narc, std::vector<std::string> &args);
+void usageHelp();
 
 int main(int argc, char *argv[])
 {
 	std::cout << "\nNitro-Archiver v1.9beta - Copyright (C) 2017 Jes\n"
 	          << "This software is distributed under "
-	          << "GNU General Public Licence v3\n"
+	          << "GNU General Public License v3\n"
 	          << "You can get a copy of the source code in "
 	          << "<https://github.com/JesMJM/Nitro-Archiver>\n"
 	          << std::endl;
 
 	std::fstream narc;
+	std::vector<std::string> arguments(argv, argv + argc);
 
 	//If the user simply opens the program.
 	if (argc == 1)
@@ -68,11 +60,12 @@ int main(int argc, char *argv[])
 	//If the user opens the program dragging a narc in the exe file.
 	else if (argc == 2)
 	{
-		narc.open(argv[1], std::ios::binary | std::ios::in);
+		narc.open(arguments.at(1), std::ios::binary | std::ios::in);
 
 		if (narc.fail())
 		{
-			std::cerr << "Error opening \"" << argv[1] << "\"" << std::endl;
+			std::cerr << "Error opening \"" << arguments.at(1) << "\""
+			          << std::endl;
 			return 1;
 		}
 		chekFile(narc, FILE_SELECTED_WITH_ARGUMENTS);
@@ -80,7 +73,6 @@ int main(int argc, char *argv[])
 	//If the user opens the program calling it with args from command line.
 	else
 	{
-		std::vector<std::string> arguments(argv, argv + argc);
 		narc.open(arguments.at(1), std::ios::binary | std::ios::in);
 
 		if (narc.fail())
@@ -98,10 +90,16 @@ int main(int argc, char *argv[])
 	//Ask args if user do not open the program with args from command line.
 	if (argc < 3)
 	{
-		std::vector<std::string> arguments;
+		if (argc == 1)
+		{
+			arguments.erase(arguments.begin(), arguments.begin() + 1);
+		}
+		else
+		{
+			arguments.erase(arguments.begin(), arguments.begin() + 2);
+		}
 
 		std::string tempString{};
-		std::string tempStringSearch{};
 		std::cout << "Enter arguments: ";
 		getline(std::cin, tempString);
 
@@ -110,16 +108,40 @@ int main(int argc, char *argv[])
 			arguments.push_back(tempString.substr(0, tempString.find(' ')));
 
 			tempString.erase(0, (tempString.find(' ') + 1));
+			if (tempString.find(' ') == std::string::npos &&
+			    !tempString.empty())
+			{
+				arguments.push_back(tempString.substr(0, tempString.find(' ')));
+				tempString.clear();
+			}
 		}
 	}
 
+
+	if (arguments.at(0) == "-d")
+		NARCinfo(narc);
+	else if (arguments.at(0) == "-h")
+		usageHelp();
+	else if (arguments.at(0) == "-u")
+	{
+		arguments.erase(arguments.begin());
+		unpackFiles(narc, arguments);
+	}
+	else
+	{
+		std::cout << "\nCommand \"" << arguments.at(0)
+		          << "\" not recognized.\n"
+		             "Type '-h' to see command usage.\n"
+		             "Type '-h [command]' to see detailed information about "
+		             "one command.";
+	}
 	std::cin.get();
 }
 
 
 void chekFile(std::fstream &narc, bool openedViaArgument)
 {
-	bool invalidInput{false}; //If true at the end of the func, trows a warn.
+	bool invalidInput{false};
 	char buffer[4]{};         //Temporal storage for using read();.
 	std::string tempString{}; //For comparing buffer with == or !=.
 
@@ -140,13 +162,10 @@ void chekFile(std::fstream &narc, bool openedViaArgument)
 	uint32_t chunkSize{};
 
 	narc.seekg(0x18, std::ios::beg);
-	narc.read(buffer, 0x2);
-	files = buffer[1] * 256 + buffer[0];
+	narc.read(reinterpret_cast<char *>(&files), 0x2);
 
 	narc.seekg(0x14, std::ios::beg);
-	narc.read(buffer, 0x4);
-	chunkSize = buffer[3] * 256 * 256 * 256 + buffer[2] * 256 * 256 +
-	            buffer[1] * 256 + buffer[0];
+	narc.read(reinterpret_cast<char *>(&chunkSize), 0x4);
 
 	if (((files * 8u) + 0xCu) != chunkSize) invalidInput = true;
 

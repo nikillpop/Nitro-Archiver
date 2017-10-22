@@ -19,8 +19,7 @@
 #include <iomanip>
 #include <iostream>
 
-
-void readHeaderData(std::fstream &narc)
+void NARCinfo(std::fstream &narc)
 {
 	char readedData[4]{};
 
@@ -92,8 +91,8 @@ void readHeaderData(std::fstream &narc)
 
 
 
-	//File Alocation Table######################################################
-	std::cout << "\n_____File Alocation Table_____" << std::endl;
+	//File Allocation Table#####################################################
+	std::cout << "\n_____File Allocation Table_____" << std::endl;
 
 	//Chunk Name----------------------------------------------------------------
 	narc.seekg(0x10, std::ios::beg);
