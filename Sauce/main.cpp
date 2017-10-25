@@ -35,8 +35,7 @@ int main(int argc, char *argv[])
 	          << "This software is distributed under "
 	          << "GNU General Public License v3\n"
 	          << "You can get a copy of the source code in "
-	          << "<https://github.com/JesMJM/Nitro-Archiver>\n"
-	          << std::endl;
+	          << "<https://github.com/JesMJM/Nitro-Archiver>\n\n";
 
 	std::fstream narc;
 	std::vector<std::string> arguments(argv, argv + argc);
@@ -52,7 +51,7 @@ int main(int argc, char *argv[])
 
 		if (narc.fail())
 		{
-			std::cerr << "Error opening \"" << fileName << "\"" << std::endl;
+			std::cerr << "Error opening \"" << fileName << "\"";
 			return 1;
 		}
 		chekFile(narc, FILE_SELECTED_WITH_NITRO_ARCHIVER);
@@ -64,8 +63,7 @@ int main(int argc, char *argv[])
 
 		if (narc.fail())
 		{
-			std::cerr << "Error opening \"" << arguments.at(1) << "\""
-			          << std::endl;
+			std::cerr << "Error opening \"" << arguments.at(1) << "\"";
 			return 1;
 		}
 		chekFile(narc, FILE_SELECTED_WITH_ARGUMENTS);
@@ -77,8 +75,7 @@ int main(int argc, char *argv[])
 
 		if (narc.fail())
 		{
-			std::cerr << "Error opening \"" << arguments.at(1) << "\""
-			          << std::endl;
+			std::cerr << "Error opening \"" << arguments.at(1) << "\"";
 			return 1;
 		}
 		//Deletes args "X:\...\Narc-Archiver" & "X:\...\filename.narc".
@@ -172,6 +169,7 @@ void chekFile(std::fstream &narc, bool openedViaArgument)
 	//End of checks.
 	if (invalidInput)
 	{
+		//TODO: try '\a' audible bell
 		std::cout << "Error:\tThe file is invalid or is corrupted\n"
 		          << "\tyou continue at your own risk.\n\n";
 

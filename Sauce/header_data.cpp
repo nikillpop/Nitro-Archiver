@@ -34,92 +34,92 @@ void NARCinfo(std::fstream &narc)
 	std::cout << std::setfill('0'); //Most used padding char.
 
 	//Narc Header chunk=<0x0-0xF>=(16-bytes)====================================
-	std::cout << "\n_________Narc Header__________" << std::endl;
+	std::cout << "\n_________Narc Header__________";
 
 	//Chunk Name-<0x0-0x3>-(4-bytes)--------------------------------------------
-	std::cout << "Chunk Name:\t\t";
+	std::cout << "\nChunk Name:\t\t";
 	narc.read(charBuffer, 0x4);
-	std::cout << "\"" << charBuffer << "\"" << std::endl;
+	std::cout << "\"" << charBuffer << "\"";
 
 	//Byte Order-<0x4-0x5>-(2-bytes)--------------------------------------------
-	std::cout << "Byte Order:\t\t0x";
+	std::cout << "\nByte Order:\t\t0x";
 	narc.read(reinterpret_cast<char *>(&buffer16), 0x2);
-	std::cout << std::setw(4) << buffer16 << std::endl;
+	std::cout << std::setw(4) << buffer16;
 
 	//Version-<0x6-0x7>-(2-bytes)-----------------------------------------------
-	std::cout << "Version:\t\t0x";
+	std::cout << "\nVersion:\t\t0x";
 	narc.read(reinterpret_cast<char *>(&buffer16), 0x2);
-	std::cout << std::setw(4) << buffer16 << std::endl;
+	std::cout << std::setw(4) << buffer16;
 
 	//File Size-<0x8-0xb>-(4-bytes)---------------------------------------------
-	std::cout << "File Size:\t\t0x";
+	std::cout << "\nFile Size:\t\t0x";
 	narc.read(reinterpret_cast<char *>(&buffer32), 0x4);
-	std::cout << std::setw(4) << buffer32 << " (" << std::dec << buffer32
-	          << " bytes)" << std::endl;
+	std::cout << std::setw(8) << buffer32 << " (" << std::dec << buffer32
+	          << " bytes)";
 
 	//chunk size-<0xc-0xd>-(2-bytes)--------------------------------------------
-	std::cout << "Chunk size:\t\t0x";
+	std::cout << "\nChunk size:\t\t0x";
 	narc.read(reinterpret_cast<char *>(&buffer16), 0x2);
-	std::cout << std::setw(4) << buffer16 << std::endl;
+	std::cout << std::setw(4) << buffer16;
 
 	//Number of following chunks-<0xe-0xf>-(2-bytes)----------------------------
-	std::cout << "Following chunks:\t0x";
+	std::cout << "\nFollowing chunks:\t0x";
 	narc.read(reinterpret_cast<char *>(&buffer16), 0x2);
-	std::cout << std::setw(4) << buffer16 << std::endl;
+	std::cout << std::setw(4) << buffer16;
 
 
 
 	//File Allocation Table chunk=<0x10-0x??>=(??-bytes)========================
-	std::cout << "\n_____File Allocation Table_____" << std::endl;
+	std::cout << "\n_____File Allocation Table_____";
 
 	//Chunk Name-<0x10-0x13>-(4-bytes)------------------------------------------
 	narc.read(charBuffer, 0x4);
-	std::cout << "Chunk Name:\t\t";
-	std::cout << "\"" << charBuffer << "\"" << std::endl;
+	std::cout << "\nChunk Name:\t\t";
+	std::cout << "\"" << charBuffer << "\"";
 
 	//Chunk Size-<0x14-0x17>-(4-bytes)------------------------------------------
-	std::cout << "Chunk size:\t\t0x";
+	std::cout << "\nChunk size:\t\t0x";
 	narc.read(reinterpret_cast<char *>(&buffer32), 0x4);
-	std::cout << std::setw(4) << buffer32 << " (" << std::dec << buffer32
-	          << " bytes)" << std::endl;
+	std::cout << std::setw(8) << buffer32 << " (" << std::dec << buffer32
+	          << " bytes)";
 
 	//Number of Files-<0x18-0x19>-(2-bytes)-------------------------------------
 	uint16_t numOfFiles{}; //Used later to iterate trough FAT
 
 	narc.read(reinterpret_cast<char *>(&numOfFiles), 0x2);
-	std::cout << "Files:\t\t\t" << std::dec << numOfFiles << std::endl;
+	std::cout << "\nFiles:\t\t\t" << std::dec << numOfFiles;
 
 	//Reserved-<0x1a-0x1b>-(2-bytes)--------------------------------------------
-	std::cout << "Reserved: \t\t0x";
+	std::cout << "\nReserved: \t\t0x";
 	narc.read(reinterpret_cast<char *>(&buffer16), 0x2);
-	std::cout << std::setw(4) << buffer16 << std::endl;
+	std::cout << std::setw(4) << buffer16;
 
 	//FAT-<0x1c-0x??>-(??-bytes)------------------------------------------------
-	std::cout << "FAT" << std::endl;
+	std::cout << "FAT";
 	for (int file{1}; file <= numOfFiles; file++)
 	{
-		std::cout << std::dec << file << ":\t";
+		std::cout << '\n' << std::dec << file << ":\t";
 
 		narc.read(reinterpret_cast<char *>(&buffer32), 0x4);
 		std::cout << std::setw(8) << buffer32 << " - ";
 
 		narc.read(reinterpret_cast<char *>(&buffer32), 0x4);
-		std::cout << std::setw(8) << buffer32 << std::endl;
+		std::cout << std::setw(8) << buffer32;
 	}
 
 
 
 	//File Name Table chunk=<??>=(??-bytes)=====================================
-	std::cout << "\n________File Name Table________" << std::endl;
+	std::cout << "\n________File Name Table________";
 
 	//Chunk Name-<??>-(4-bytes)-------------------------------------------------
 	narc.read(charBuffer, 0x4);
-	std::cout << "Chunk Name:\t\t";
-	std::cout << "\"" << charBuffer << "\"" << std::endl;
+	std::cout << "\nChunk Name:\t\t";
+	std::cout << "\"" << charBuffer << "\"";
 
 	//Chunk Size-<??>-(4-bytes)-------------------------------------------------
-	std::cout << "Chunk size:\t\t0x";
+	std::cout << "\nChunk size:\t\t0x";
 	narc.read(reinterpret_cast<char *>(&buffer32), 0x4);
-	std::cout << std::setw(4) << buffer32 << " (" << std::dec << buffer32
-	          << " bytes)" << std::endl;
+	std::cout << std::setw(8) << buffer32 << " (" << std::dec << buffer32
+	          << " bytes)";
 }
