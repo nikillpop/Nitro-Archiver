@@ -32,10 +32,10 @@ void usageHelp();
 int main(int argc, char *argv[])
 {
 	std::cout << "\nNitro-Archiver v1.9beta - Copyright (C) 2017 Jes\n"
-	          << "This software is distributed under "
-	          << "GNU General Public License v3\n"
-	          << "You can get a copy of the source code in "
-	          << "<https://github.com/JesMJM/Nitro-Archiver>\n\n";
+	             "This software is distributed under "
+	             "GNU General Public License v3\n"
+	             "You can get a copy of the source code in "
+	             "<https://github.com/JesMJM/Nitro-Archiver>\n\n";
 
 	std::fstream narc;
 	std::vector<std::string> arguments(argv, argv + argc);
@@ -104,13 +104,11 @@ int main(int argc, char *argv[])
 		{
 			arguments.push_back(tempString.substr(0, tempString.find(' ')));
 
-			tempString.erase(0, (tempString.find(' ') + 1));
-			if (tempString.find(' ') == std::string::npos &&
-			    !tempString.empty())
-			{
-				arguments.push_back(tempString.substr(0, tempString.find(' ')));
-				tempString.clear();
-			}
+			tempString.erase(0, tempString.find(' '));
+
+			if (tempString.empty()) break;
+
+			if (tempString.at(0) == ' ') tempString.erase(0, 1);
 		}
 	}
 

@@ -23,8 +23,15 @@
 
 void unpackFiles(std::fstream &narc, std::vector<std::string> &args)
 {
-	/** BUG: crash if only "-u" is provided,
-	 *  make code to show number of files instead */
+	narc.seekg(0x18, std::ios::beg);
+	uint16_t numOfFiles{};
+	narc.read(reinterpret_cast<char *>(&numOfFiles), 0x2);
+
+	if (args.empty()) //If user only provide "-u"
+	{
+		std::cout << "The number of files is " << numOfFiles;
+		return;
+	}
 
 	std::vector<int> fileIndex;
 	fileIndex.resize(args.size());
@@ -36,13 +43,48 @@ void unpackFiles(std::fstream &narc, std::vector<std::string> &args)
 		++i;
 	}
 
-	uint32_t startAdress{};
-	uint32_t finalAdress{};
+	long fimgStartAdress{0x14};
+	uint32_t tempRead{};
+
+	//FAT size
+	narc.seekg(fimgStartAdress, std::ios::beg);
+	narc.read(reinterpret_cast<char *>(&tempRead), 0x4);
+	fimgStartAdress += tempRead;
+
+	//FNT size
+	narc.seekg(fimgStartAdress, std::ios::beg);
+	narc.read(reinterpret_cast<char *>(&tempRead), 0x4);
+	fimgStartAdress += tempRead + 0x4;
+
+
+	uint32_t fatStartEntry{};
+	uint32_t fatFinalEntry{};
 	int fileSize{};
+	int nameIndex{};
+
 	for (const auto &fileToExtract : fileIndex)
 	{
+		if (fileToExtract > numOfFiles)
+		{
+			std::cout << "The file N" << char(167) << ' ' << fileToExtract
+			          << " doesn't exist\n";
+			++nameIndex;
+			continue;
+		}
+		//To know how many bytes long is the file to extract
 		narc.seekg((fileToExtract * 8) + 0x1c, std::ios::beg);
-		narc.read(reinterpret_cast<char *>(&startAdress), 0x4);
-		narc.read(reinterpret_cast<char *>(&finalAdress), 0x4);
+		narc.read(reinterpret_cast<char *>(&fatStartEntry), 0x4);
+		narc.read(reinterpret_cast<char *>(&fatFinalEntry), 0x4);
+		fileSize = fatFinalEntry - fatStartEntry;
+
+		//Prepare the read container
+		narc.seekg(fimgStartAdress + fatStartEntry, std::ios::beg);
+		std::string contents;
+		contents.resize(fileSize);
+
+		narc.read(&contents[0], fileSize);
+		std::ofstream outputFile(args[nameIndex]);
+		outputFile.write(&contents[0], fileSize);
+		++nameIndex;
 	}
 }
