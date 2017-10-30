@@ -24,10 +24,13 @@
 #define FILE_SELECTED_WITH_ARGUMENTS true
 #define FILE_SELECTED_WITH_NITRO_ARCHIVER false
 
-void NARCinfo(std::fstream &narc);
 void chekFile(std::fstream &narc, bool openedViaArgument);
-void unpackFiles(std::fstream &narc, std::vector<std::string> &args);
-void usageHelp();
+
+//Commands
+void NARCinfo(std::fstream &narc);                                    // -d
+void unpackFiles(std::fstream &narc, std::vector<std::string> &args); // -u
+void writeFiles(std::fstream &narc, std::vector<std::string> &args);  // -w
+void usageHelp();                                                     // -h
 
 int main(int argc, char *argv[])
 {
@@ -115,12 +118,19 @@ int main(int argc, char *argv[])
 
 	if (arguments.at(0) == "-d")
 		NARCinfo(narc);
+
 	else if (arguments.at(0) == "-h")
 		usageHelp();
+
 	else if (arguments.at(0) == "-u")
 	{
 		arguments.erase(arguments.begin());
 		unpackFiles(narc, arguments);
+	}
+	else if (arguments.at(0) == "-w")
+	{
+		arguments.erase(arguments.begin());
+		writeFiles(narc, arguments);
 	}
 	else
 	{
