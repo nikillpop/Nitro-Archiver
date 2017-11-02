@@ -101,10 +101,10 @@ void NARCinfo(std::fstream &narc)
 		std::cout << '\n' << std::dec << file << ":\t";
 
 		narc.read(reinterpret_cast<char *>(&buffer32), 0x4);
-		std::cout << std::setw(8) << buffer32 << " - ";
+		std::cout << std::setw(8) << std::hex << buffer32 << " - ";
 
 		narc.read(reinterpret_cast<char *>(&buffer32), 0x4);
-		std::cout << std::setw(8) << buffer32;
+		std::cout << std::setw(8) << std::hex << buffer32;
 	}
 
 
